@@ -21,6 +21,9 @@ class ScenarioSession(XVIZBaseSession):
  
     def on_disconnect(self):
         print("Disconnect!")
+        
+    def get_index(self,element):
+        return int(element[:-10])
 
     async def main(self):
         # metadata = self._scenario.get_metadata()
@@ -29,10 +32,9 @@ class ScenarioSession(XVIZBaseSession):
         metadata = BytesIO(file.read()).read()
         pbe_folder = 'D:\项目\数据标注平台\平台原型开发\场景提取模块\数据demo\output'
         for root, dirs, files_name in os.walk(pbe_folder):
+            files_name.sort(key=self.get_index)
             for file_name in files_name:
                 file_list.append(os.path.join(root, file_name))
-        file_list.sort()
-        print(file_list)
         # await self._socket.send(json.dumps(metadata))
         await self._socket.send(metadata)
 
